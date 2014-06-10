@@ -1,4 +1,4 @@
-This is python script that parses the SNAP facebook dataset into a
+This is python script that parses the [[http://snap.stanford.edu/data/egonets-Facebook.html][SNAP facebook dataset]] into a
 single NetworkX network.
 
 Usage:
