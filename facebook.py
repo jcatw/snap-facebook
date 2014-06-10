@@ -3,11 +3,12 @@ import networkx as nx
 import numpy as np
 import glob
 import os, os.path
+import math
 
 feat_file_name = "feature_map.txt"
 feature_index = {}  #numeric index to name
 inverted_feature_index = {} #name to numeric index
-network = nx.DiGraph()
+network = nx.Graph()
 
 def parse_featname_line(line):
     line = line[(line.find(' '))+1:]  # chop first field
@@ -126,13 +127,21 @@ if __name__ == '__main__':
     print "Loading network..."
     load_network()
     print "done."
-    
-    def test(predicate, test_name):
-        print "testing %s..." % (test_name,)
-        assert predicate, "%s failed!" % (test_name,)
-        print "%s passed." % (test_name,)
 
-    test(network.order() == 4039, "order")
-    test(network.size() == 88234, "size")
+    failures = 0
+    def test(actual, expected, test_name):
+        global failures  #lol python scope
+        try:
+            print "testing %s..." % (test_name,)
+            assert actual == expected, "%s failed (%s != %s)!" % (test_name,actual, expected)
+            print "%s passed (%s == %s)." % (test_name,actual,expected)
+        except AssertionError as e:
+            print e
+            failures += 1
     
-    print "All tests passed."
+    test(network.order(), 4039, "order")
+    test(network.size(), 88234, "size")
+    test(round(nx.average_clustering(network),4), 0.6055, "clustering")
+    print "%d tests failed." % (failures,)
+    
+    
