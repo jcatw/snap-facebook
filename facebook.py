@@ -106,9 +106,20 @@ def load_edges():
         network.add_edge(node_from, node_to)
 
 def load_network():
+    """
+    Load the network.  After calling this function, facebook.network points to a networkx object for the facebook data.
+
+    """
     load_features()
     load_nodes()
     load_edges()
+
+def universal_feature(feature_index):
+    """
+    Does every node have this feature?
+
+    """
+    return len([x for x in network.nodes_iter() if feature_index in network.node[x]]) // network.order() == 1
 
 if __name__ == '__main__':
     print "Running tests."
