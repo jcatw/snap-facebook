@@ -1,0 +1,19 @@
+This is python script that parses the SNAP facebook dataset into a
+single NetworkX network.
+
+Usage:
+#+begin_src python
+import facebook
+
+# load the network
+facebook.load_network()
+
+# do stuff with it
+print facebook.network.order()
+print facebook.network.size()
+#+end_src
+
+Tests:
+#+begin_src sh
+./facebook.py
+#+end_src
