@@ -5,7 +5,9 @@ import glob
 import os, os.path
 import math
 
-feat_file_name = "feature_map.txt"
+pathhack = os.path.dirname(os.path.realpath(__file__))
+
+feat_file_name = "%s/feature_map.txt" % (pathhack,)
 feature_index = {}  #numeric index to name
 inverted_feature_index = {} #name to numeric index
 network = nx.Graph()
@@ -22,7 +24,7 @@ def load_features():
     if not os.path.exists(feat_file_name):
         feat_index = {}
         # build the index from data/*.featnames files
-        featname_files = glob.iglob("data/*.featnames")
+        featname_files = glob.iglob("%s/data/*.featnames" % (pathhack,))
         for featname_file_name in featname_files:
             featname_file = open(featname_file_name, 'r')
             for line in featname_file:
@@ -58,14 +60,14 @@ def load_nodes():
     global network
 
     # get all the node ids by looking at the files
-    node_ids = [int(x.split("/")[-1].split('.')[0]) for x in glob.glob("data/*.featnames")]
+    node_ids = [int(x.split("/")[-1].split('.')[0]) for x in glob.glob("%s/data/*.featnames" % (pathhack,))]
 
     # parse each node
     for node_id in node_ids:
-        featname_file = open("data/%d.featnames" % node_id,'r')
-        feat_file     = open("data/%d.feat" % node_id,'r')
-        egofeat_file  = open("data/%d.egofeat" % node_id,'r')
-        edge_file     = open("data/%d.edges" % node_id, 'r')
+        featname_file = open("%s/data/%d.featnames" % (pathhack,node_id), 'r')
+        feat_file     = open("%s/data/%d.feat"      % (pathhack,node_id), 'r')
+        egofeat_file  = open("%s/data/%d.egofeat"   % (pathhack,node_id), 'r')
+        edge_file     = open("%s/data/%d.edges"     % (pathhack,node_id), 'r')
 
         # parse ego node
         network.add_node(node_id)
@@ -98,7 +100,7 @@ def load_nodes():
 def load_edges():
     global network
     assert network.order() > 0, "call load_nodes() first"
-    edge_file = open("facebook_combined.txt","r")
+    edge_file = open("%s/facebook_combined.txt" % (pathhack,),"r")
     for line in edge_file:
         # nodefrom nodeto
         split = [int(x) for x in line.split(" ")]
