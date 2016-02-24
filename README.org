@@ -8,9 +8,18 @@ import facebook
 # load the network
 facebook.load_network()
 
-# do stuff with it
 print facebook.network.order()
 print facebook.network.size()
+
+# Look at a node's features
+print facebook.network.node[0]['featurs']
+
+# 0: feature not present for this user
+# 1: user does not have this feature
+# 2: user does have this feature
+
+# look at the features of the whole network
+print facebook.feature_matrix()
 #+end_src
 
 Tests:

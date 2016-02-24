@@ -74,9 +74,10 @@ def load_nodes():
         # 0 1 0 0 0 ...
         ego_features = [int(x) for x in egofeat_file.readline().split(' ')]
         i = 0
+        network.node[node_id]['features'] = np.zeros(len(feature_index))
         for line in featname_file:
             key, val = parse_featname_line(line)
-            network.node[node_id][key] = ego_features[i]
+            network.node[node_id]['features'][key] = ego_features[i] + 1
             i += 1
 
         # parse neighboring nodes
@@ -86,10 +87,11 @@ def load_nodes():
             node_id = split[0]
             features = split[1:]
             network.add_node(node_id)
+            network.node[node_id]['features'] = np.zeros(len(feature_index))
             i = 0
             for line in featname_file:
                 key, val = parse_featname_line(line)
-                network.node[node_id][key] = features[i]
+                network.node[node_id]['features'][key] = features[i]
                 i += 1
             
         featname_file.close()
@@ -117,12 +119,22 @@ def load_network():
     load_nodes()
     load_edges()
 
+def feature_matrix():
+    n_nodes = network.number_of_nodes()
+    n_features = len(feature_index)
+
+    X = np.zeros((n_nodes, n_features))
+    for i,node in enumerate(network.nodes()):
+        X[i,:] = network.node[node]['features']
+
+    return X
+
 def universal_feature(feature_index):
     """
     Does every node have this feature?
 
     """
-    return len([x for x in network.nodes_iter() if feature_index in network.node[x]]) // network.order() == 1
+    return len([x for x in network.nodes_iter() if network.node[x]['feautures'][feature_index] > 0]) // network.order() == 1
 
 if __name__ == '__main__':
     print "Running tests."
