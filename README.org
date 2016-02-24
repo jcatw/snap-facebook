@@ -12,7 +12,7 @@ print facebook.network.order()
 print facebook.network.size()
 
 # Look at a node's features
-print facebook.network.node[0]['featurs']
+print facebook.network.node[0]['features']
 
 # 0: feature not present for this user
 # 1: user does not have this feature
