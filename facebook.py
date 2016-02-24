@@ -11,6 +11,7 @@ feat_file_name = "%s/feature_map.txt" % (pathhack,)
 feature_index = {}  #numeric index to name
 inverted_feature_index = {} #name to numeric index
 network = nx.Graph()
+ego_nodes = []
 
 def parse_featname_line(line):
     line = line[(line.find(' '))+1:]  # chop first field
@@ -58,9 +59,11 @@ def load_features():
 def load_nodes():
     assert len(feature_index) > 0, "call load_features() first"
     global network
+    global ego_nodes
 
     # get all the node ids by looking at the files
-    node_ids = [int(x.split("/")[-1].split('.')[0]) for x in glob.glob("%s/data/*.featnames" % (pathhack,))]
+    ego_nodes = [int(x.split("/")[-1].split('.')[0]) for x in glob.glob("%s/data/*.featnames" % (pathhack,))]
+    node_ids = ego_nodes
 
     # parse each node
     for node_id in node_ids:
